@@ -6,6 +6,13 @@
 #include "GameFramework/Character.h"
 #include "US_Character.generated.h"
 
+class UInputComponent;
+class USpringArmComponent;
+class UCameraComponent;
+struct FUS_CharacterStats;
+class USpringArmComponent;
+class UCameraComponent;
+
 UCLASS()
 class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 {
@@ -27,6 +34,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InteractAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
+	class UDataTable* CharacterDataTable;
+	struct FUS_CharacterStats* CharacterStats;
+
 public:
 	// Sets default values for this character's properties
 	AUS_Character();
@@ -46,16 +57,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera;}
+	void UpdateCharacterStats(int32 CharacterLevel);
+
+	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera;}
+	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const {return CharacterStats;}
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USpringArmComponent> CameraBoom;
+	TObjectPtr<USpringArmComponent> CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UCameraComponent> FollowCamera;
+	TObjectPtr<UCameraComponent> FollowCamera;
 
 };
